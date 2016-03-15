@@ -1,0 +1,24 @@
+function custom_use_customer_from_address ( $from_email, $obj ) {
+	if ( is_a( $obj, 'WC_Email_New_Order' ) ) {
+		$address_details = $obj->object->get_address( 'billing' );
+		if ( isset( $address_details['email'] ) && '' != $address_details['email'] ) {
+			$from_email = $address_details['email'];
+		}
+	}
+	return $from_email;
+}
+add_filter( 'woocommerce_email_from_address', 'custom_use_customer_from_address', null, 2 );
+
+function custom_use_customer_from_name ( $from_name, $obj ) {
+	if ( is_a( $obj, 'WC_Email_New_Order' ) ) {
+		$address_details = $obj->object->get_address( 'billing' );
+		if ( isset( $address_details['first_name'] ) && '' != $address_details['first_name'] ) {
+			$from_name = $address_details['first_name'];
+		}
+		if ( isset( $address_details['last_name'] ) && '' != $address_details['last_name'] ) {
+			$from_name .= ' ' . $address_details['last_name'];
+		}
+	}
+	return $from_name;
+}
+add_filter( 'woocommerce_email_from_name', 'custom_use_customer_from_name', null, 2 );
